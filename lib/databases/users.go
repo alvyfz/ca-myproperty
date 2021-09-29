@@ -15,3 +15,8 @@ func CreateUser(user model.User) model.User {
 	config.DB.Create(&user)
 	return user
 }
+
+func UpdateUser(id string, user model.User) model.User {
+	config.DB.Where("id = ?", id).Updates(&user)
+	return user
+}

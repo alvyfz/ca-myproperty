@@ -12,3 +12,7 @@ func GetAllUsers() []model.User {
 func CreateUser(user model.User) model.User {
 	return database.CreateUser(user)
 }
+
+func UpdateUser(id string, user model.User) model.User {
+	return database.UpdateUser(id, user)
+}
