@@ -5,7 +5,7 @@ import (
 	service "ca-myproperty/services"
 	"net/http"
 
-	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo"
 )
 
 func GetAllUsers(c echo.Context) error {
