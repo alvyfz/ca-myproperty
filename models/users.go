@@ -10,4 +10,5 @@ type User struct {
 	PhoneNumber string `json:"phone_number"`
 	Gender      string `json:"gender"`
 	City        string `json:"city"`
+	Token       string `json:"token"`
 }

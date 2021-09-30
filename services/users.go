@@ -16,3 +16,19 @@ func CreateUser(user model.User) model.User {
 func UpdateUser(id string, user model.User) model.User {
 	return database.UpdateUser(id, user)
 }
+
+func GetUserByID(id string) model.User {
+	return database.GetUserByID(id)
+}
+
+func LoginUser(user *model.User) (interface{}, error) {
+	return database.LoginUser(user)
+}
+
+func GetDetailUser(id int) (interface{}, error) {
+	return database.GetDetailUser(id)
+}
+
+// func isValid(u  , p string) model.User {
+// 	return database.isValid(u, p)
+// }
