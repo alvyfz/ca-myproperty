@@ -2,13 +2,20 @@ package config
 
 import (
 	model "ca-myproperty/models"
+	"context"
 	"fmt"
+	"time"
 
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
 var DB *gorm.DB
+
+var DBLog *mongo.Client
 
 func InitDB() {
 	config := map[string]string{
@@ -32,6 +39,24 @@ func InitDB() {
 		panic(e)
 	}
 	InitMigrate()
+}
+
+// if wanna using mongoDB incomment this
+func InitLog() {
+	var err error
+	DBLog, err = mongo.NewClient(options.Client().ApplyURI("mongodb://localhost:27017/myproperty"))
+	if err != nil {
+		panic(err)
+	}
+
+	ctx, _ := context.WithTimeout(context.Background(), 1*time.Second)
+
+	err = DBLog.Connect(ctx)
+	if err != nil {
+		panic(err)
+	}
+
+	DBLog.ListDatabaseNames(ctx, bson.M{})
 }
 
 func InitMigrate() {
