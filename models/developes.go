@@ -4,7 +4,7 @@ import "gorm.io/gorm"
 
 type Developer struct {
 	gorm.Model
-	ID          uint   `gorm:"primarykey"`
+	ID          uint   `gorm:"primaryKey"`
 	Name        string `json:"name"`
 	Description string `json:"description"`
 	City        string `json:"city"`

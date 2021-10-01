@@ -13,17 +13,17 @@ func GetAllTransactions() []model.Transaction {
 
 func GetTransactionByID(id string) model.Transaction {
 	var transaction model.Transaction
-	config.DB.Where("id = ?", id).Joins("User", "Property").Find(&transaction)
+	config.DB.Where("id = ?", id).Joins("User").Joins("Property").Find(&transaction)
 	return transaction
 }
 
 func CreateTransaction(transaction model.Transaction) model.Transaction {
-	config.DB.Create(&transaction).Joins("User", "Property")
+	config.DB.Create(&transaction).Joins("User").Joins("Property")
 	return transaction
 }
 
 func UpdateTransaction(id string, transaction model.Transaction) model.Transaction {
-	config.DB.Where("id = ?", id).Updates(&transaction).Joins("User", "Property")
+	config.DB.Where("id = ?", id).Updates(&transaction).Joins("User").Joins("Property")
 	return transaction
 }
 func DeleteTransactionByID(id string) model.Transaction {

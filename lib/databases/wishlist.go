@@ -6,7 +6,7 @@ import (
 )
 
 func CreateWishlist(wishlist model.Wishlist) model.Wishlist {
-	config.DB.Create(&wishlist).Joins("User", "Property")
+	config.DB.Create(&wishlist).Joins("User").Joins("Property")
 	return wishlist
 }
 

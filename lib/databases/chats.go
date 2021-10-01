@@ -6,7 +6,7 @@ import (
 )
 
 func CreateChat(chat model.Chat) model.Chat {
-	config.DB.Create(&chat).Joins("User", "Developer")
+	config.DB.Create(&chat).Joins("User").Joins("Developer")
 	return chat
 }
 

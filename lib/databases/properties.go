@@ -7,23 +7,23 @@ import (
 
 func GetAllProperties() []model.Property {
 	var property []model.Property
-	config.DB.Joins("PropertyType", "User", "Developer").Find(&property)
+	config.DB.Joins("PropertyType").Joins("User").Joins("Developer").Find(&property)
 	return property
 }
 
 func GetPropertyByID(id string) model.Property {
 	var property model.Property
-	config.DB.Where("id = ?", id).Joins("PropertyType", "User", "Developer").Find(&property)
+	config.DB.Where("id = ?", id).Joins("PropertyType").Joins("User").Joins("Developer").Find(&property)
 	return property
 }
 
 func CreateProperty(Property model.Property) model.Property {
-	config.DB.Create(&Property).Joins("PropertyType", "User", "Developer")
+	config.DB.Create(&Property).Joins("PropertyType").Joins("User").Joins("Developer")
 	return Property
 }
 
 func UpdateProperty(id string, property model.Property) model.Property {
-	config.DB.Where("id = ?", id).Updates(&property).Joins("PropertyType", "User", "Developer")
+	config.DB.Where("id = ?", id).Updates(&property).Joins("PropertyType").Joins("User").Joins("Developer")
 	return property
 }
 func DeletePropertyByID(id string) model.Property {

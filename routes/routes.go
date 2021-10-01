@@ -25,13 +25,13 @@ func New() *echo.Echo {
 	e.GET("/developers/:id", controller.GetDeveloperByID)
 
 	//wishlist
-	e.GET("/wishlists", controller.CreateWishlist)
+	e.POST("/wishlists", controller.CreateWishlist)
 	e.DELETE("wishlists/:id", controller.DeleteWishlistByID)
 
 	//propertyType
-	e.GET("/property-Types", controller.GetAllPropertyTypes)
-	e.POST("/property-Types", controller.CreatePropertyType)
-	e.PUT("/property-Types", controller.CreatePropertyType)
+	e.GET("/property-types", controller.GetAllPropertyTypes)
+	e.POST("/property-types", controller.CreatePropertyType)
+	e.PUT("/property-types", controller.CreatePropertyType)
 
 	//property
 	e.GET("/properties", controller.GetAllProperties)

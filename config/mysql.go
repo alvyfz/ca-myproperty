@@ -16,7 +16,7 @@ func InitDB() {
 		"DB_Password": "root",
 		"DB_Port":     "3306",
 		"DB_Host":     "127.0.0.1",
-		"DB_Name":     "ca_myproperty",
+		"DB_Name":     "myproperty_new",
 	}
 
 	connectionString := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",

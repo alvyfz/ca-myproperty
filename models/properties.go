@@ -4,7 +4,7 @@ import "gorm.io/gorm"
 
 type Property struct {
 	gorm.Model
-	ID             uint          `gorm:"primarykey"`
+	ID             uint          `gorm:"primaryKey"`
 	Name           string        `json:"name"`
 	Price          int           `json:"price"`
 	Description    string        `json:"description"`
@@ -15,7 +15,7 @@ type Property struct {
 	Interior       string        `json:"interior"`
 	Location       string        `json:"location"`
 	PropertyTypeID uint          `json:"property_type_id"`
-	PropertyType   *PropertyType `json:"property_type"`
+	PropertyType   *PropertyType `json:"property_type,omitempty"`
 	UserID         uint          `json:"user_id"`
 	User           *User         `json:"user,omitempty"`
 	DeveloperID    uint          `json:"developer_id"`
