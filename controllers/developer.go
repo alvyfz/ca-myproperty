@@ -39,3 +39,11 @@ func UpdateDeveloper(c echo.Context) error {
 		"data":    Developer,
 	})
 }
+func GetDeveloperByID(c echo.Context) error {
+	id := c.Param("id")
+	developer := service.GetDeveloperByID(id)
+	return c.JSON(http.StatusOK, echo.Map{
+		"message": "GetDeveloperByIDController",
+		"data":    developer,
+	})
+}

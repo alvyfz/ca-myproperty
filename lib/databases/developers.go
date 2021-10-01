@@ -6,11 +6,16 @@ import (
 )
 
 func CreateDeveloper(developer model.Developer) model.Developer {
-	config.DB.Create(&developer)
+	config.DB.Create(&developer).Joins("User")
 	return developer
 }
 
 func UpdateDeveloper(id string, developer model.Developer) model.Developer {
-	config.DB.Where("id = ?", id).Updates(&developer)
+	config.DB.Where("id = ?", id).Updates(&developer).Joins("User")
+	return developer
+}
+func GetDeveloperByID(id string) model.Developer {
+	var developer model.Developer
+	config.DB.Where("id = ?", id).Joins("User").Find(&developer)
 	return developer
 }

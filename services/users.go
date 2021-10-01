@@ -20,14 +20,17 @@ func UpdateUser(id string, user model.User) model.User {
 func GetUserByID(id string) model.User {
 	return database.GetUserByID(id)
 }
-
-func LoginUser(user *model.User) (interface{}, error) {
-	return database.LoginUser(user)
+func IsValid(u string, p string) bool {
+	return database.IsValid(u, p)
 }
 
-func GetDetailUser(id int) (interface{}, error) {
-	return database.GetDetailUser(id)
-}
+// func LoginUser(user *model.User) (interface{}, error) {
+// 	return database.LoginUser(user)
+// }
+
+// func GetDetailUser(id int) (interface{}, error) {
+// 	return database.GetDetailUser(id)
+// }
 
 // func isValid(u  , p string) model.User {
 // 	return database.isValid(u, p)

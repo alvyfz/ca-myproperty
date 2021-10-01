@@ -1,28 +1,30 @@
 package middlewares
 
 import (
-	"ca-myproperty/config/constants"
-	"time"
+	"net/http"
+	"strings"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"
 )
 
-func CreateToken(userId int) (string, error) {
-	claims := jwt.MapClaims{}
-	claims["authotized"] = true
-	claims["userId"] = userId
-	claims["exp"] = time.Now().Add(time.Hour * 1).Unix() //token expired 1 jam
-	token := jwt.NewWithClaims(jwt.SigningMethodES256, claims)
-	return token.SignedString(([]byte(constants.SECRET_JWT)))
-}
+func JWTAuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		// Bearer token-blablala=
+		authorizationFromHeader := c.Request().Header.Get("authorization")
 
-func ExtractTokenUserId(e echo.Context) int {
-	user := e.Get("user").(*jwt.Token)
-	if user.Valid {
-		claims := user.Claims.(jwt.MapClaims)
-		userId := claims["userId"].(int)
-		return userId
+		// Replace Bearer, Get token-blablala=
+		tokenString := strings.ReplaceAll(authorizationFromHeader, "Bearer ", "")
+
+		claims := jwt.MapClaims{}
+		_, err := jwt.ParseWithClaims(tokenString, &claims, func(t *jwt.Token) (interface{}, error) {
+			return []byte("asdasdasd"), nil
+		})
+		if err != nil {
+			return c.String(http.StatusForbidden, "token salah")
+		}
+
+		c.Set("email", claims["userId"])
+		return next(c)
 	}
-	return 0
 }
