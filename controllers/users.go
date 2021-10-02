@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	"github.com/golang-jwt/jwt"
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 func GetAllUsers(c echo.Context) error {
@@ -22,7 +22,9 @@ func CreateUser(c echo.Context) error {
 			"error":   err.Error(),
 		})
 	}
+
 	newUser = service.CreateUser(newUser)
+	newUser.Password = ""
 	return c.JSON(http.StatusOK, echo.Map{
 		"message": "CreateUserController",
 		"data":    newUser,
@@ -54,21 +56,21 @@ func GetUserByID(c echo.Context) error {
 	})
 }
 
-
 func UserLogin(c echo.Context) error {
 	user := model.User{}
 	if err := c.Bind(&user); err != nil {
 		return c.String(http.StatusBadRequest, err.Error())
 	}
 
-	isValid := service.IsValid(user.Email, user.Password)
+	user, err := service.IsValid(user.Email, user.Password)
 
-	if !isValid {
+	if err != nil {
 		return c.String(http.StatusBadRequest, "email atau password salah")
 	}
 
 	claims := jwt.MapClaims{}
-	claims["userId"] = user.Email
+	claims["userId"] = user.ID
+	claims["userEmail"] = user.Email
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	tokenString, err := token.SignedString([]byte("asdasdasd"))
 	if err != nil {
@@ -80,4 +82,3 @@ func UserLogin(c echo.Context) error {
 		"data":   tokenString,
 	})
 }
-

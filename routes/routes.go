@@ -1,11 +1,10 @@
 package routes
 
 import (
-	"ca-myproperty/config/constants"
 	controller "ca-myproperty/controllers"
+	"ca-myproperty/middlewares"
 
-	"github.com/labstack/echo"
-	"github.com/labstack/echo/middleware"
+	"github.com/labstack/echo/v4"
 )
 
 func New() *echo.Echo {
@@ -16,7 +15,7 @@ func New() *echo.Echo {
 	e.GET("/users", controller.GetAllUsers)
 	e.POST("/register", controller.CreateUser)
 	e.PUT("/users/:id", controller.UpdateUser)
-	e.GET("/users/:id", controller.GetUserByID)
+	e.GET("/users/:id", controller.GetUserByID, middlewares.JWTAuth)
 	e.POST("/login", controller.UserLogin)
 
 	// developer
@@ -43,7 +42,7 @@ func New() *echo.Echo {
 	//transaction
 	e.GET("/transactions", controller.GetAllTransactions)
 	e.GET("/transactions/:id", controller.GetTransactionByID)
-	e.POST("/trannsactions", controller.CreateTransaction)
+	e.POST("/transactions", controller.CreateTransaction)
 	e.DELETE("transactions", controller.DeleteTransactionByID)
 	e.PUT("transactions/:id", controller.UpdateTransaction)
 
@@ -51,8 +50,8 @@ func New() *echo.Echo {
 	e.GET("/chats", controller.CreateChat)
 	e.DELETE("chats/:id", controller.DeleteChatByID)
 
-	r := e.Group("/jwt")
-	r.Use(middleware.JWT([]byte(constants.SECRET_JWT)))
+	// r := e.Group("/jwt")
+	// r.Use(middleware.JWT([]byte(constants.SECRET_JWT)))
 
 	return e
 }

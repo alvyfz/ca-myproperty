@@ -8,9 +8,9 @@ import (
 
 func main() {
 	config.InitDB()
-	// config.InitLog()
+	config.InitLog()
 	e := routes.New()
 	e.Use(middlewares.LogMiddlewares)
-	// m.LogMiddlewares(e)
+	// middlewares.LogMiddlewares(e)
 	e.Logger.Fatal(e.Start(":8080"))
 }

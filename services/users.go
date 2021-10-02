@@ -20,7 +20,7 @@ func UpdateUser(id string, user model.User) model.User {
 func GetUserByID(id string) model.User {
 	return database.GetUserByID(id)
 }
-func IsValid(u string, p string) bool {
+func IsValid(u string, p string) (model.User, error) {
 	return database.IsValid(u, p)
 }
 

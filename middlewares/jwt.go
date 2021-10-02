@@ -5,10 +5,10 @@ import (
 	"strings"
 
 	"github.com/dgrijalva/jwt-go"
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
-func JWTAuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
+func JWTAuth(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		// Bearer token-blablala=
 		authorizationFromHeader := c.Request().Header.Get("authorization")
@@ -24,7 +24,7 @@ func JWTAuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 			return c.String(http.StatusForbidden, "token salah")
 		}
 
-		c.Set("email", claims["userId"])
+		c.Set("user", claims)
 		return next(c)
 	}
 }

@@ -16,6 +16,6 @@ func UpdateDeveloper(id string, developer model.Developer) model.Developer {
 }
 func GetDeveloperByID(id string) model.Developer {
 	var developer model.Developer
-	config.DB.Where("id = ?", id).Joins("User").Find(&developer)
+	config.DB.Where("id = ?", id).Find(&developer).Joins("User")
 	return developer
 }

@@ -2,6 +2,7 @@ package database
 
 import (
 	"ca-myproperty/config"
+	"errors"
 
 	model "ca-myproperty/models"
 )
@@ -14,7 +15,7 @@ func GetAllUsers() []model.User {
 
 func GetUserByID(id string) model.User {
 	var user model.User
-	config.DB.Where("id = ?", id).Joins("Wishlist").Find(&user)
+	config.DB.Where("id = ?", id).Find(&user).Joins("Wishlist")
 	return user
 }
 
@@ -28,11 +29,16 @@ func UpdateUser(id string, user model.User) model.User {
 	return user
 }
 
-func IsValid(u string, p string) bool {
+func IsValid(u string, p string) (model.User, error) {
 	var user model.User
 	if err := config.DB.Where("email = ?", u).Find(&user).Error; err != nil {
-		return false
+		// fmt.Println(err)
+		return model.User{}, err
+
+	}
+	if user.Password != p {
+		return model.User{}, errors.New("email or password incorrect")
 	}
 
-	return p == user.Password
+	return user, nil
 }

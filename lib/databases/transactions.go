@@ -7,18 +7,19 @@ import (
 
 func GetAllTransactions() []model.Transaction {
 	var transaction []model.Transaction
-	config.DB.Joins("User", "Property").Find(&transaction)
+	config.DB.Find(&transaction).Joins("User", "Property")
 	return transaction
 }
 
 func GetTransactionByID(id string) model.Transaction {
 	var transaction model.Transaction
-	config.DB.Where("id = ?", id).Joins("User").Joins("Property").Find(&transaction)
+	config.DB.Where("id = ?", id).Find(&transaction).Joins("User").Joins("Property")
 	return transaction
 }
 
 func CreateTransaction(transaction model.Transaction) model.Transaction {
-	config.DB.Create(&transaction).Joins("User").Joins("Property")
+	config.DB.Create(&transaction)
+	config.DB.Where("transactions.id = ?", transaction.ID).Joins("User").Joins("Property").Find(&transaction)
 	return transaction
 }
 
