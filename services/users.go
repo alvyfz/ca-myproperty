@@ -24,14 +24,3 @@ func IsValid(u string, p string) (model.User, error) {
 	return database.IsValid(u, p)
 }
 
-// func LoginUser(user *model.User) (interface{}, error) {
-// 	return database.LoginUser(user)
-// }
-
-// func GetDetailUser(id int) (interface{}, error) {
-// 	return database.GetDetailUser(id)
-// }
-
-// func isValid(u  , p string) model.User {
-// 	return database.isValid(u, p)
-// }
