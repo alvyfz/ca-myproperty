@@ -5,6 +5,7 @@ import (
 	service "ca-myproperty/services"
 	"net/http"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo/v4"
 )
 
@@ -15,12 +16,16 @@ func GetAllProperties(c echo.Context) error {
 
 func CreateProperty(c echo.Context) error {
 	var newProperty model.Property
+	u := c.Get("user")
+	claims := u.(jwt.MapClaims)
+	userID := claims["userId"].(float64)
 	if err := c.Bind(&newProperty); err != nil {
 		return c.JSON(http.StatusOK, echo.Map{
 			"message": "CreatePropertyController",
 			"error":   err.Error(),
 		})
 	}
+	newProperty.UserID = uint(userID)
 	newProperty = service.CreateProperty(newProperty)
 	return c.JSON(http.StatusOK, echo.Map{
 		"message": "CreatePropertyController",

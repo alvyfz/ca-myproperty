@@ -5,6 +5,7 @@ import (
 	service "ca-myproperty/services"
 	"net/http"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo/v4"
 )
 
@@ -15,12 +16,16 @@ func GetAllTransactions(c echo.Context) error {
 
 func CreateTransaction(c echo.Context) error {
 	var newTransaction model.Transaction
+	u := c.Get("user")
+	claims := u.(jwt.MapClaims)
+	userID := claims["userId"].(float64)
 	if err := c.Bind(&newTransaction); err != nil {
 		return c.JSON(http.StatusOK, echo.Map{
 			"message": "CreateTransactionController",
 			"error":   err.Error(),
 		})
 	}
+	newTransaction.UserID = uint(userID)
 	newTransaction = service.CreateTransaction(newTransaction)
 	return c.JSON(http.StatusOK, echo.Map{
 		"message": "CreateTransactionController",
