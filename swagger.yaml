@@ -2,11 +2,18 @@ openapi: "3.0.2"
 info:
   title: myProperty
   description: "API for myProperty"
-  version: "0.0.1"
+  version: 1.0.0
+  contact:
+    email: alvyfauzi10@gmail.com
+  license:
+    name: Github 
+    url: 'http://www.github.com/alvyfz/ca-property'
 servers:
   - url: https://api.server.test/v1
 
 tags:
+  - name: Register
+    description: Everything about proeprties
   - name: Property
     description: Everything about proeprties
   - name: User
@@ -23,56 +30,12 @@ tags:
     description: Everything about chats
 
 paths:
-  /property:
+  /register:
     post:
-      tags:
-        - Property
-      summary: Create new property 
-      parameters:
-        - in: body
-          name: property
-          required: true
-          schema:
-            properties:
-              name:
-                type: string
-              price:
-                type: integer
-              description:
-                type: string
-              bedroom:
-                type: integer
-              bathroom:
-                type: integer
-              surface_are:
-                type: integer
-              building_area:
-                type: integer
-              location:
-                type: string
-              property_type_id:
-                type: uint
-              user_id:
-                type: uint
-              developer_id: 
-                type: uint
-      responses:
-        "200":
-          description: OK
-
-        "400":
-          description: Bad Request
-  /property/{id}:
-    put:
-      tags:
-        - Property
-      summary: Edit a property
-      parameters:
-        - in: body
-          name: property
-          required: true
-          schema:
-            $ref: "#components/schemas/Property"
+      tags: 
+        - Register
+      summary: Register account 
+      description: Create a user account 
       responses:
         "200":
           description: Created
@@ -83,9 +46,9 @@ paths:
                   status:
                     example: success
                   message:
-                    example: Property Updated
+                    example: user created
                   data:
-                    $ref: "#components/schemas/Property"
+                    $ref: "#/components/schemas/User"
         "400":
           description: Bad Request
           content:
@@ -96,21 +59,56 @@ paths:
                     example: err
                   message:
                     example: Bad Request
-  /property/{property_id}:
-    delete:
-      tags:
-        - Property
-      summary: Delete a specified property
-      parameters:
-        - in: path
-          name: property_id
-          schema:
-            type: uint
-          description: Id of Property to be deleted
+  /login:
+    post:
+      tags: 
+        - Register
+      summary: Login account 
+      parameters: 
+        - name: email
+          in: path
+          description: email input
           required: true
+          schema:
+            type: string
+        - name: password
+          in: path
+          description: password input
+          required: true
+          schema:
+            type: string
+      description: Login Auth user account 
       responses:
         "200":
-          description: OK
+          description: Login
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: success
+                  body:
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyRW1haWwiOiJtYWx2eUBnbWFpbC5jb20iLCJ1c2VySWQiOjE4fQ.QXAgvzEd-HGy1lGQpXQCKcNv7tLcFitVfG9V2ALi6i8
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: err
+                  message:
+                    example: Bad Request   
+
+  /property:
+    post:
+      tags: 
+        - Property
+      summary: Return a data of new property
+      description: Create a property 
+      responses:
+        "200":
+          description: Created
           content:
             application/json:
               schema:
@@ -118,7 +116,9 @@ paths:
                   status:
                     example: success
                   message:
-                    example: Property Deleted
+                    example: Property created
+                  data:
+                    $ref: "#/components/schemas/Property"
         "400":
           description: Bad Request
           content:
@@ -139,142 +139,808 @@ paths:
                     example: err
                   message:
                     example: User Unauthorized
-                    
-  /user/login:
-    post:
-      tags:
-        - User
-      summary: Logs user into system
-      parameters:
-        - in: query
-          name: username
-          schema:
-            type: string
-          required: true
-        - in: query
-          name: password
-          schema:
-            type: string
-          required: true
+    get:
+      tags: 
+      - Property
+      summary: Return list data of properties
+      description: Get all properties data
       responses:
         "200":
-          description: OK
-        "400":
-          description: Bad Request
-  /user:
-    post:
-      tags:
-        - User
-      summary: Register new user
-      parameters:
-        - in: body
-          name: user
+          description: All properties data
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: success
+                  message:
+                    example: Data list of properties
+                  data:
+                    $ref: "#/components/schemas/Property"
+  /property/{id}:
+    get:
+      tags: 
+        - Property
+      summary: Return a data of id property
+      parameters: 
+        - name: id
+          in: path
+          description: ID of property to return
           required: true
           schema:
-            properties:
-              username:
-                type: string
-              password:
-                type: string
-                format: password
-              email:
-                type: string
-              fullname:
-                type: string
-              date_of_birth:
-                type: string
-                format: date-time
-              phone_number:
-                type: string
-              role_id:
-                type: integer
-              address:
-                $ref: "#components/schemas/Address"
+            type: integer
+      description: Get data property by id
       responses:
         "200":
-          description: OK
-
+          description: Get data by id
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: success
+                  message:
+                    example: list of properties
+                  data:
+                    $ref: "#/components/schemas/Property"
         "400":
           description: Bad Request
-  /product:
-    post:
-      tags:
-        - Product
-      summary: Create a new product
-      parameters:
-        - in: body
-          name: product
-          required: true
-          schema:
-            $ref: "#components/schemas/Product"
-      responses:
-        "405":
-          description: Invalid input
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: err
+                  message:
+                    example: Bad Request
+        "401":
+          description: User Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: err
+                  message:
+                    example: User Unauthorized
     put:
-      tags:
-        - Product
-      summary: Edit an existing product
-      parameters:
-        - in: body
-          name: product
+      tags: 
+        - Property
+      summary: Update data property by ID
+      parameters: 
+        - name: id
+          in: path
+          description: ID of property to return update
           required: true
           schema:
-            $ref: "#components/schemas/Product"
+            type: integer
+      description: update data property by id
       responses:
-        "201":
-          description: Updated
+        "200":
+          description: Update data by id
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: update success
+                  message:
+                    example: Property Updated
+                  data:
+                    $ref: "#/components/schemas/Property"
         "400":
           description: Bad Request
-  /order:
-    post:
-      tags:
-        - Order
-      summary: Place a laundry order
-      parameters:
-        - in: body
-          name: laundromat
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: err
+                  message:
+                    example: Bad Request
+        "401":
+          description: User Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: err
+                  message:
+                    example: User Unauthorized 
+    delete:
+      tags: 
+        - Property
+      summary: Delete by ID
+      parameters: 
+        - name: id
+          in: path
+          description: ID of property to return delete
           required: true
           schema:
-            $ref: "#components/schemas/Laundromat"
+            type: integer
+      description: delete data property by id
       responses:
-        "201":
+        "200":
+          description: delete data by id
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: success
+                  message:
+                    example: Property deleted
+                  data:
+                    $ref: "#/components/schemas/Property"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: err
+                  message:
+                    example: Bad Request
+        "401":
+          description: User Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: err
+                  message:
+                    example: User Unauthorized  
+  /user/{id}:
+    get:
+      tags: 
+        - User
+      summary: Return a data of id user
+      parameters: 
+        - name: id
+          in: path
+          description: ID of user to return
+          required: true
+          schema:
+            type: integer
+      description: Get data user by id
+      responses:
+        "200":
+          description: Get data by id
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: success
+                  message:
+                    example: list of user
+                  data:
+                    $ref: "#/components/schemas/User"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: err
+                  message:
+                    example: Bad Request
+        "401":
+          description: User Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: err
+                  message:
+                    example: User Unauthorized
+    put:
+      tags: 
+        - User
+      summary: Update data user by ID
+      parameters: 
+        - name: id
+          in: path
+          description: ID of user_id to return update
+          required: true
+          schema:
+            type: integer
+      description: update data user by id
+      responses:
+        "200":
+          description: Update data by id
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: update success
+                  message:
+                    example: Property Updated
+                  data:
+                    $ref: "#/components/schemas/User"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: err
+                  message:
+                    example: Bad Request
+        "401":
+          description: User Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: err
+                  message:
+                    example: User Unauthorized 
+  /developer:
+    post:
+      tags: 
+        - Developer
+      summary: Return a data of new developer
+      description: Create a developer 
+      responses:
+        "200":
           description: Created
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: success
+                  message:
+                    example: Developer created
+                  data:
+                    $ref: "#/components/schemas/Developer"
         "400":
           description: Bad Request
-    put:
-      tags:
-        - Order
-      summary: Edit an existing laundromat
-      parameters:
-        - in: body
-          name: laundromat
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: err
+                  message:
+                    example: Bad Request
+        "401":
+          description: User Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: err
+                  message:
+                    example: User Unauthorized
+  /developer/{id}:
+    get:
+      tags: 
+        - Developer
+      summary: Return a data of id developer
+      parameters: 
+        - name: id
+          in: path
+          description: ID of developer to return
           required: true
           schema:
-            $ref: "#components/schemas/Laundromat"
+            type: integer
+      description: Get data developer by id
       responses:
-        "201":
-          description: Updated
+        "200":
+          description: Get data by id
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: success
+                  message:
+                    example: list of user
+                  data:
+                    $ref: "#/components/schemas/Developer"
         "400":
           description: Bad Request
-
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: err
+                  message:
+                    example: Bad Request
+        "401":
+          description: User Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: err
+                  message:
+                    example: User Unauthorized
+    put:
+      tags: 
+        - Developer
+      summary: Update data developer by ID
+      parameters: 
+        - name: id
+          in: path
+          description: ID of developer to return update
+          required: true
+          schema:
+            type: integer
+      description: update data developer by id
+      responses:
+        "200":
+          description: Update data by id
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: update success
+                  message:
+                    example: Developer Updated
+                  data:
+                    $ref: "#/components/schemas/Developer"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: err
+                  message:
+                    example: Bad Request
+        "401":
+          description: User Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: err
+                  message:
+                    example: User Unauthorized 
+  /transaction:
+    post:
+      tags: 
+        - Transaction
+      summary: Return a data of new transaction
+      description: Create a new transaction 
+      responses:
+        "200":
+          description: Created
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: success
+                  message:
+                    example: Transaction created
+                  data:
+                    $ref: "#/components/schemas/Transaction"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: err
+                  message:
+                    example: Bad Request
+        "401":
+          description: User Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: err
+                  message:
+                    example: User Unauthorized
+    get:
+      tags: 
+      - Transaction
+      summary: Return list data of transaction
+      description: Get all transaction data
+      responses:
+        "200":
+          description: All transactions data
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: success
+                  message:
+                    example: Data list of transaction
+                  data:
+                    $ref: "#/components/schemas/Transaction"
+  /transaction/{id}:
+    get:
+      tags: 
+        - Transaction
+      summary: Return a data of id Transaction
+      parameters: 
+        - name: id
+          in: path
+          description: ID of transaction to return
+          required: true
+          schema:
+            type: integer
+      description: Get data transaction by id
+      responses:
+        "200":
+          description: Get data by id
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: success
+                  message:
+                    example: list of transaction
+                  data:
+                    $ref: "#/components/schemas/Transaction"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: err
+                  message:
+                    example: Bad Request
+        "401":
+          description: User Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: err
+                  message:
+                    example: User Unauthorized
+    put:
+      tags: 
+        - Transaction
+      summary: Update data transaction by ID
+      parameters: 
+        - name: id
+          in: path
+          description: ID of transaction to return update
+          required: true
+          schema:
+            type: integer
+      description: update data transaction by id
+      responses:
+        "200":
+          description: Update data by id
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: update success
+                  message:
+                    example: Transaction Updated
+                  data:
+                    $ref: "#/components/schemas/Transaction"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: err
+                  message:
+                    example: Bad Request
+        "401":
+          description: User Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: err
+                  message:
+                    example: User Unauthorized 
+    delete:
+      tags: 
+        - Transaction
+      summary: Delete by ID
+      parameters: 
+        - name: id
+          in: path
+          description: ID of transaction to return delete
+          required: true
+          schema:
+            type: integer
+      description: delete data transaction by id
+      responses:
+        "200":
+          description: delete data by id
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: success
+                  message:
+                    example: Transaction deleted
+                  data:
+                    $ref: "#/components/schemas/Transaction"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: err
+                  message:
+                    example: Bad Request
+        "401":
+          description: User Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: err
+                  message:
+                    example: User Unauthorized  
+  /property-type:
+    post:
+      tags: 
+        - Property Type
+      summary: Return a data of new property type
+      description: Create a property 
+      responses:
+        "200":
+          description: Created
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: success
+                  message:
+                    example: Property type created
+                  data:
+                    $ref: "#/components/schemas/PropertyType"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: err
+                  message:
+                    example: Bad Request
+        "401":
+          description: User Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: err
+                  message:
+                    example: User Unauthorized
+    get:
+      tags: 
+      - Property Type
+      summary: Return list data of property types
+      description: Get all property types data
+      responses:
+        "200":
+          description: All property types data
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: success
+                  message:
+                    example: Data list of property type
+                  data:
+                    $ref: "#/components/schemas/PropertyType"
+  /wishlist:
+    post:
+      tags: 
+        - Wishlist
+      summary: Return a data of new wishlist
+      description: Create a wishlist 
+      responses:
+        "200":
+          description: Created
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: success
+                  message:
+                    example: Wishlist created
+                  data:
+                    $ref: "#/components/schemas/Wishlist"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: err
+                  message:
+                    example: Bad Request
+        "401":
+          description: User Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: err
+                  message:
+                    example: User Unauthorized
+  /wishlist/{id}:
+    delete:
+      tags: 
+        - Wishlist
+      summary: Delete by ID
+      parameters: 
+        - name: id
+          in: path
+          description: ID of wishlist to return delete
+          required: true
+          schema:
+            type: integer
+      description: delete data wishlist by id
+      responses:
+        "200":
+          description: delete data by id
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: success
+                  message:
+                    example: wishlist deleted
+                  data:
+                    $ref: "#/components/schemas/Wishlist"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: err
+                  message:
+                    example: Bad Request
+        "401":
+          description: User Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: err
+                  message:
+                    example: User Unauthorized  
+  /chat:
+    post:
+      tags: 
+        - Chat
+      summary: Return a data of new chat
+      description: Create a chat 
+      responses:
+        "200":
+          description: Created
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: success
+                  message:
+                    example: Chat created
+                  data:
+                    $ref: "#/components/schemas/Chat"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: err
+                  message:
+                    example: Bad Request
+        "401":
+          description: User Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: err
+                  message:
+                    example: User Unauthorized
+  /chat/{id}:
+    delete:
+      tags: 
+        - Chat
+      summary: Delete by ID
+      parameters: 
+        - name: id
+          in: path
+          description: ID of chat to return delete
+          required: true
+          schema:
+            type: integer
+      description: delete data chat by id
+      responses:
+        "200":
+          description: delete data by id
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: success
+                  message:
+                    example: chat deleted
+                  data:
+                    $ref: "#/components/schemas/Chat"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: err
+                  message:
+                    example: Bad Request
+        "401":
+          description: User Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    example: err
+                  message:
+                    example: User Unauthorized  
 components:
   schemas:
-    Address:
+    Property:
       type: object
       properties:
         id:
           type: integer
-        street:
-          type: string
-        postal_code:
-          type: integer
-        city:
-          type: string
-        province:
-          type: string
-    Property:
-      type: object
-      properties:
         name: 
           type: string
         price:
@@ -292,14 +958,16 @@ components:
         location:
           type: string
         property_type_id:
-          type: uint
+          type: integer
         user_id:
-          type: uint
+          type: integer
         developer_id: 
-          type: uint
+          type: integer
     User:
       type: object
       properties:
+        id:
+          type: integer
         name:
           type: string
         email:
@@ -316,6 +984,8 @@ components:
     Developer:
       type: object
       properties:
+        id:
+          type: integer
         name:
           type: string
         description:
@@ -323,30 +993,41 @@ components:
         city:
           type: string
         user_id:
-          type: uint
+          type: integer
     Transaction:
       type: object
       properties:
+        id:
+          type: integer
         user_id: 
-          type: uint
+          type: integer
         property_id:
-          type: uint
+          type: integer
     PropertyType:
       type: object
       properties:
-          name: 
-            type: string
+        id:
+          type: integer
+        name: 
+          type: string
     Wishlist:
       type: object
       properties:
+        id:
+          type: integer
         user_id:
-          type: uint
+          type: integer
         property_id:
-          type: uint
+          type: integer
     Chat:
       type: object
       properties:
+        id:
+          type: integer
         user_id:
-          type: uint
+          type: integer
         developer_id:
-          type: uint
+          type: integer
+          
+
+    

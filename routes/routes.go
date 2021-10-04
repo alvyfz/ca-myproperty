@@ -12,7 +12,7 @@ func New() *echo.Echo {
 
 	// e.GET("/", controller.BasicAuth, middlewares.JWTAuthMiddleware)
 	//routes User
-	e.GET("/user", controller.GetAllUsers)
+	// e.GET("/user", controller.GetAllUsers)
 	e.POST("/register", controller.CreateUser)
 	e.PUT("/user/:id", controller.UpdateUser, m.JWTAuth)
 	e.GET("/user/:id", controller.GetUserByID, m.JWTAuth)
