@@ -1,25 +1,14 @@
 package controller
 
 import (
+	openapi "ca-myproperty/thirdparties/ipapi"
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
 
-	openapi "ca-myproperty/thirdparties/ipapi"
-
 	"github.com/labstack/echo/v4"
 )
 
-func ReadUserIP(r *http.Request) string {
-	IPAddress := r.Header.Get("X-Real-Ip")
-	if IPAddress == "" {
-		IPAddress = r.Header.Get("X-Forwarded-For")
-	}
-	if IPAddress == "" {
-		IPAddress = r.RemoteAddr
-	}
-	return IPAddress
-}
 func CheckLocationByIP(c echo.Context) error {
 
 	ipapiClient := http.Client{}
