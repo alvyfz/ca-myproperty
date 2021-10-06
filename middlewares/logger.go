@@ -8,11 +8,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-// func LogMiddlewares(e *echo.Echo) {
-// 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{Format: "[${time_rfc3339}], method=${method}, host=${host}, path=${path}, latecy_human=${latecy_human}, status=${status}\n"}))
 
-// }
-// // if wanna using logger with mongodb
 func LogMiddlewares(next echo.HandlerFunc) echo.HandlerFunc {
 	coll := config.DBLog.Database("myproperty").Collection("logger")
 
