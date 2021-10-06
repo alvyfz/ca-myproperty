@@ -5,15 +5,15 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
+	"net"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
 )
 
 func CheckLocationByIP(c echo.Context) error {
-
-	ip := IPAPI()
+	ip:=getIP(c.Request())
+	fmt.Println(ip)
 	ipapiClient := http.Client{}
 	req, err := http.NewRequest("GET", fmt.Sprintf("https://ipapi.co/%s/json", ip), nil)
 	if err != nil {
@@ -52,21 +52,16 @@ func CheckLocationByIP(c echo.Context) error {
 	})
 }
 
-func IPAPI() string {
-	ipapiClient := http.Client{}
-	req, err := http.NewRequest("GET", "https://ip.johnpili.com/ip", nil)
-	if err != nil {
-		panic(err)
-	}
-	req.Header.Set("User-Agent", "ipapi.co/#go-v1.3")
-	resp, err := ipapiClient.Do(req)
-	if err != nil {
-		panic(err)
-	}
-	defer resp.Body.Close()
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		log.Fatal(err)
-	}
-	return string(body)
+
+func getIP(req *http.Request) string{
+    ip, _, err := net.SplitHostPort(req.RemoteAddr)
+    if err != nil {
+        panic(err)
+    }
+
+    userIP := net.ParseIP(ip)
+    if userIP == nil {
+        panic(err)
+    }
+  return ip
 }
