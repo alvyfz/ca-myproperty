@@ -3,7 +3,9 @@ package controller
 import (
 	openapi "ca-myproperty/thirdparties/ipapi"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -11,8 +13,9 @@ import (
 
 func CheckLocationByIP(c echo.Context) error {
 
+	ip := IPAPI()
 	ipapiClient := http.Client{}
-	req, err := http.NewRequest("GET", "https://ipapi.co/json/", nil)
+	req, err := http.NewRequest("GET", fmt.Sprintf("https://ipapi.co/%s/json", ip), nil)
 	if err != nil {
 		return c.JSON(http.StatusBadGateway, echo.Map{
 			"message": "Your location",
@@ -47,4 +50,23 @@ func CheckLocationByIP(c echo.Context) error {
 		"message": "Your location",
 		"data":    res,
 	})
+}
+
+func IPAPI() string {
+	ipapiClient := http.Client{}
+	req, err := http.NewRequest("GET", "https://ipapi.co/ip/", nil)
+	if err != nil {
+		panic(err)
+	}
+	req.Header.Set("User-Agent", "ipapi.co/#go-v1.3")
+	resp, err := ipapiClient.Do(req)
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return string(body)
 }
