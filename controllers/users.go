@@ -78,7 +78,7 @@ func UserLogin(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, echo.Map{
-		"status": "Login success",
+		"status": "Login success mantep",
 		"data":   tokenString,
 	})
 }
