@@ -54,7 +54,7 @@ func CheckLocationByIP(c echo.Context) error {
 
 func IPAPI() string {
 	ipapiClient := http.Client{}
-	req, err := http.NewRequest("GET", "https://ipapi.co/ip/", nil)
+	req, err := http.NewRequest("GET", "https://ip.johnpili.com/ip", nil)
 	if err != nil {
 		panic(err)
 	}
