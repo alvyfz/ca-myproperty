@@ -12,6 +12,9 @@ func JWTAuth(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		// Bearer token-blablala=
 		authorizationFromHeader := c.Request().Header.Get("authorization")
+		if authorizationFromHeader == "" {
+			return c.String(http.StatusForbidden, "token salah")
+		}
 
 		// Replace Bearer, Get token-blablala=
 		tokenString := strings.ReplaceAll(authorizationFromHeader, "Bearer ", "")

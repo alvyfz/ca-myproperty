@@ -12,10 +12,12 @@ func GetAllTransactions() []model.Transaction {
 func CreateTransaction(transaction model.Transaction) model.Transaction {
 	return database.CreateTransaction(transaction)
 }
-
-func UpdateTransaction(id string, transaction model.Transaction) model.Transaction {
+func UpdateTransaction(id string, transaction model.Transaction) (model.Transaction) {
 	return database.UpdateTransaction(id, transaction)
 }
+// func UpdateTransaction(id string, transaction model.Transaction) (model.Transaction,  error) {
+// 	return database.UpdateTransaction(id, transaction)
+// }
 
 func GetTransactionByID(id string) model.Transaction {
 	return database.GetTransactionByID(id)
