@@ -7,25 +7,25 @@ import (
 	model "ca-myproperty/models"
 )
 
-func GetAllUsers() []model.User {
-	var users []model.User
-	config.DB.Find(&users).Joins("Wishlist")
-	return users
-}
+// func GetAllUsers() []model.User {
+// 	var users []model.User
+// 	config.DB.Find(&users)
+// 	return users
+// }
 
 func GetUserByID(id string) model.User {
 	var user model.User
-	config.DB.Where("id = ?", id).Find(&user).Joins("Wishlist")
+	config.DB.Where("id = ?", id).Find(&user)
 	return user
 }
 
 func CreateUser(user model.User) model.User {
-	config.DB.Create(&user).Joins("Wishlist")
+	config.DB.Create(&user)
 	return user
 }
 
 func UpdateUser(id string, user model.User) model.User {
-	config.DB.Where("id = ?", id).Updates(&user).Joins("Wishlist")
+	config.DB.Where("id = ?", id).Updates(&user)
 	return user
 }
 

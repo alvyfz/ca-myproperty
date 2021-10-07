@@ -9,10 +9,10 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func GetAllUsers(c echo.Context) error {
-	users := service.GetAllUsers()
-	return c.JSON(http.StatusOK, users)
-}
+// func GetAllUsers(c echo.Context) error {
+// 	users := service.GetAllUsers()
+// 	return c.JSON(http.StatusOK, users)
+// }
 
 func CreateUser(c echo.Context) error {
 	var newUser model.User

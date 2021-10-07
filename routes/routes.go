@@ -53,8 +53,7 @@ func New() *echo.Echo {
 	//location
 	e.GET("/location", controller.CheckLocationByIP)
 	e.GET("/", controller.Home)
-	// r := e.Group("/jwt")
-	// r.Use(middleware.JWT([]byte(constants.SECRET_JWT)))
+
 
 	return e
 }

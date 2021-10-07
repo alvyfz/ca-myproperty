@@ -14,7 +14,6 @@ import (
 )
 
 var DB *gorm.DB
-
 var DBLog *mongo.Client
 
 type ConfigDB struct {
