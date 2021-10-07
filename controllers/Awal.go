@@ -7,5 +7,5 @@ import (
 )
 
 func Home(c echo.Context) error {
-	return c.String(http.StatusOK, "Welcome to RESTFULL API myProperty")
+	return c.String(http.StatusOK, "Welcome to RESTFULL API myProperty Kampus Merdeka")
 }
